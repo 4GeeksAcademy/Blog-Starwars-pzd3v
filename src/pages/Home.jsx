@@ -1,19 +1,26 @@
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Home = () => {
-  const getApi = async () => {
-	const response = fetch("https://www.swapi.tech/api/people")
+
+  const getPeople = async () => {
+	const response = await fetch("https://www.swapi.tech/api/people")
+	if (response.ok) {
+		const data = await response.json();
+		console.log(data);
+	}
   }
-  
+
   const { store, dispatch } = useGlobalReducer();
 
+  useEffect(() => {
+    getPeople();
+  }, []);
+
+
   return (
-    <div className="text-center mt-5">
-      <h1>Hello Rigo!!</h1>
-      <p>
-        <img src={rigoImageUrl} />
-      </p>
-    </div>
+    <div>
+		Hola mundo
+	</div>
   );
 };

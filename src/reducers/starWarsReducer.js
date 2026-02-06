@@ -30,6 +30,12 @@ export default function starWarsReducer(store, action = {}) {
         };
       }
 
+      case "SET_PEOPLE":
+        return {
+          ...store,
+          people: action.payload,
+        };
+
     default:
       return store;
   }

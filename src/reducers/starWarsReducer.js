@@ -2,41 +2,42 @@ export const initialState = {
   people: [],
   planets: [],
   vehicles: [],
-  favorites: [], // Aqui guardaremos lo que el usuario eligio
+  favorites: [],
 };
-export default function starWarsReducer(store, action = {}) {
+
+const starWarsReducer = (store, action) => {
   switch (action.type) {
+    case "SET_PEOPLE":
+      return { ...store, people: action.payload };
+    case "SET_PLANETS":
+      return { ...store, planets: action.payload };
+    case "SET_VEHICLES":
+      return { ...store, vehicles: action.payload };
     case "ADD_FAVORITE":
-      //Buscamos si ya está en la lista
-      const isFavorite = store.favorites.find(
-        (fav) => fav.id === action.payload.id,
+      // Buscamos por nombre para evitar colisiones de IDs entre categorías
+      const isFav = store.favorites.some(
+        (fav) => fav.name === action.payload.name,
       );
 
-      if (isFavorite) {
-        //Si ya está, lo eliminamos para que no se repita
+      if (isFav) {
+        // Si ya existe, lo filtramos por nombre para eliminarlo
         return {
           ...store,
           favorites: store.favorites.filter(
-            (fav) => fav.id !== action.payload.id,
+            (fav) => fav.name !== action.payload.name,
           ),
-          //El método .filter() crea una lista nueva SIN el elemento que ya estaba.
-        };
-      } else {
-        //Si no está, lo agregamos
-
-        return {
-          ...store,
-          favorites: [...store.favorites, action.payload],
         };
       }
-
-      case "SET_PEOPLE":
-        return {
-          ...store,
-          people: action.payload,
-        };
+      // Si no existe, lo añadimos
+      return {
+        ...store,
+        favorites: [...store.favorites, action.payload],
+      };
 
     default:
       return store;
   }
-}
+};
+
+// IMPORTANTE: Exportación por defecto para evitar el error de tu captura
+export default starWarsReducer;
